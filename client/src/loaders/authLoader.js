@@ -5,5 +5,5 @@ export const authLoader = () => {
   const tokenStr = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
   const token = JSON.parse(tokenStr);
 
-  return token ? redirect('/') : null;
+  return token ? redirect('/home') : null;
 };
