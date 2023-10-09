@@ -1,9 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { API_URL } from '../config';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
+import publicClient from './api/client/public.client';
 
 function App() {
   const [count, setCount] = useState(0);
+
+  const getData = async () => {
+    const response = await publicClient.get(`${API_URL}/test`);
+    console.log(response);
+  };
+
+  useEffect(() => {
+    getData();
+    return () => {};
+  }, []);
 
   return (
     <>
