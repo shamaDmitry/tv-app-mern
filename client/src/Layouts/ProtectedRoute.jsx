@@ -1,9 +1,9 @@
-import { Outlet, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../config';
+import Footer from '../Components/core/Footer';
+import Header from '../Components/core/Header';
 
 const ProtectedRoute = () => {
-  const navigate = useNavigate();
-
   const location = useLocation();
   const tokenStr = localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME);
   const token = JSON.parse(tokenStr);
@@ -22,20 +22,21 @@ const ProtectedRoute = () => {
   }
 
   return (
-    <main className="relative flex flex-col min-h-screen">
-      <div className="container mb-4">
+    <main className="relative flex flex-col min-h-screen selection:bg-teal-600 selection:text-white">
+      {/* <div className="container mb-4">
         <button
           className="px-3 py-1 border"
-          onClick={() => {
-            localStorage.clear();
-            navigate('/');
-          }}
+
         >
           log out
         </button>
-      </div>
+      </div> */}
+
+      <Header />
 
       <Outlet />
+
+      <Footer />
     </main>
   );
 };

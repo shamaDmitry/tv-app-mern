@@ -4,7 +4,7 @@
 // import Input from '../Components/atoms/Input';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../config';
 
 // import User from '../assets/icons/user.svg?react';
@@ -23,7 +23,7 @@ const Login = () => {
   // const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(undefined);
   const navigate = useNavigate();
-  // const location = useLocation();
+  const location = useLocation();
 
   // const {
   //   register,
@@ -60,6 +60,10 @@ const Login = () => {
 
   return (
     <div className="container flex-1">
+      {location.state && (
+        <div className="mb-3 text-red-500">{location.state.message}</div>
+      )}
+
       <p>Login</p>
 
       <button

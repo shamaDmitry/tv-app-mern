@@ -10,8 +10,11 @@ import ProtectedRoute from './Layouts/ProtectedRoute';
 
 import Login from './Pages/Login';
 import SignUp from './Pages/SignUp';
-import HomePage from './Pages/HomePage';
 import Page_404 from './Pages/Page_404';
+import ShowsPage from './Pages/ShowsPage';
+import ShowPage from './Pages/ShowPage';
+import HomePage from './Pages/HomePage';
+import PeoplePage from './Pages/PeoplePage';
 
 import { authLoader } from './loaders/authLoader';
 
@@ -26,6 +29,9 @@ const router = createBrowserRouter(
 
       <Route element={<ProtectedRoute />}>
         <Route index path="/home" element={<HomePage />} />
+        <Route path="/shows" element={<ShowsPage />} />
+        <Route path="/show/:id" element={<ShowPage />} />
+        <Route path="/people" element={<PeoplePage />} />
       </Route>
 
       <Route path="*" element={<Page_404 />} />
