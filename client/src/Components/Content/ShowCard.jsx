@@ -1,13 +1,13 @@
-import React from 'react';
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
-const ShowCard = ({ data }) => {
+const ShowCard = ({ data, className }) => {
   return (
-    <div className="transition border-2 border-teal-600 hover:shadow-xl hover:scale-105">
+    <div className={classNames("w-full transition border-2 border-teal-600 hover:shadow-xl")}>
       <figure className="min-h-[50px]">
         <Link to="/show/${id}">
           <img
-            className=""
+            className="w-full"
             src="https://static.tvmaze.com/uploads/images/medium_portrait/476/1190697.jpg"
             alt="The Voice"
           />

@@ -1,16 +1,24 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import peopleApi from '../../api/modules/people.api';
 import Title from '../../Components/atoms/Title';
 import ShowCard from '../../Components/Content/ShowCard';
 
 const Index = () => {
+  useEffect(() => {
+    peopleApi.getPersonDetail({ personId: 1 });
+    return () => {};
+  }, []);
+
   return (
     <div className="container mb-20">
-      <div className="grid gap-4 md:gap-8 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-3">
         <section className="md:col-span-2">
           <Title>Popular shows airing tonight</Title>
 
           <div className="mb-10">
-            <div className="grid grid-cols-2 gap-4 mb-5 md:gap-5 md:grid-cols-3 lg:grid-cols-5">
+            {/* <div className="grid grid-cols-2 gap-4 mb-5 md:gap-5 md:grid-cols-3 lg:grid-cols-5"> */}
+            <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3">
               {new Array(5).fill(1).map((item, index) => {
                 return <ShowCard key={index} />;
               })}
@@ -47,8 +55,8 @@ const Index = () => {
             <div className="px-3 py-2 font-bold text-white bg-slate-950">
               20-00
             </div>
-            <div className="flex gap-4 py-2 leading-6 odd:bg-gray-100">
-              <div className="w-1/5 text-center">
+            <div className="flex gap-4 p-2 leading-6 odd:bg-gray-100">
+              <div className="w-2/12 text-center">
                 <div>20-00</div>
                 <div>
                   <Link to="/" className="text-teal-600">
@@ -57,7 +65,7 @@ const Index = () => {
                 </div>
               </div>
 
-              <div className="w-[80%] text-teal-600">
+              <div className="w-10/12 text-teal-600">
                 <div className="overflow-hidden font-bold whitespace-nowrap text-ellipsis">
                   Dana White's Tuesday Night Contender Series Dana White's
                   Tuesday Night Contender Series

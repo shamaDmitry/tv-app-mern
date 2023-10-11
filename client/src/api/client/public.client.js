@@ -20,8 +20,6 @@ publicClient.interceptors.request.use(async config => {
 
 publicClient.interceptors.response.use(
   response => {
-    console.log('publicClient response', response);
-
     if (response && response.data) {
       return response.data;
     }
