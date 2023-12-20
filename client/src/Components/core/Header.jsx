@@ -28,7 +28,7 @@ const Header = () => {
   return (
     <header className="mb-5 bg-white">
       <div className="container">
-        <div className="flex items-center h-20 gap-8 border-b border-teal-600">
+        <div className="flex items-center h-20 gap-8 ">
           <Link className="block text-teal-600" to="/">
             <span className="sr-only">Home</span>
             <Logo />

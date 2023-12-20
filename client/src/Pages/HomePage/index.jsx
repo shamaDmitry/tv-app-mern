@@ -17,8 +17,7 @@ const Index = () => {
           <Title>Popular shows airing tonight</Title>
 
           <div className="mb-10">
-            {/* <div className="grid grid-cols-2 gap-4 mb-5 md:gap-5 md:grid-cols-3 lg:grid-cols-5"> */}
-            <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 mb-8 sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3">
               {new Array(5).fill(1).map((item, index) => {
                 return <ShowCard key={index} />;
               })}

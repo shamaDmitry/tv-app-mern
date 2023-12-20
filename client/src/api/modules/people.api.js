@@ -11,10 +11,6 @@ const peopleApi = {
         peopleEndpoints.getPersonDetail({ personId })
       );
 
-      // const response = await publicClient(' https://api.tvmaze.com').get(
-      //   peopleEndpoints.getPersonDetail({ personId })
-      // );
-
       return { response };
     } catch (err) {
       return { err };
