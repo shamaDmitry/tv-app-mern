@@ -3,6 +3,8 @@ import Logo from '../../assets/icons/Logo';
 import { v4 as uuidv4 } from 'uuid';
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
+import { useState } from 'react';
+import Avatar from '../atoms/Avatar';
 
 const menuItems = [
   {
@@ -24,6 +26,8 @@ const menuItems = [
 
 const Header = () => {
   const navigate = useNavigate();
+
+  const [user] = useState(() => JSON.parse(localStorage.getItem('user')));
 
   return (
     <header className="mb-5 bg-white">
@@ -59,16 +63,25 @@ const Header = () => {
 
           <div className="flex gap-4">
             <Menu className="relative" as="div">
-              <Menu.Button className="flex items-center gap-x-1">
-                <img
-                  alt="Man"
-                  src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                  className="object-cover w-10 h-10"
-                />
+              <Menu.Button className="flex items-center gap-x-2">
+                {user.image ? (
+                  <img
+                    alt="Man"
+                    src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                    className="object-cover w-10 h-10"
+                  />
+                ) : (
+                  <Avatar name={user.username} />
+                )}
 
-                <span className="text-sm font-bold capitalize text-dark-300">
-                  username
-                </span>
+                <div className="flex flex-col items-start">
+                  <span className="text-sm font-bold text-slate-900">
+                    {user.username}
+                  </span>
+                  <span className="text-sm font-medium text-gray-500">
+                    {user.email}
+                  </span>
+                </div>
               </Menu.Button>
 
               <Menu.Items className="absolute right-0 flex flex-col justify-end mb-4 overflow-hidden bg-white border rounded top-full w-52">

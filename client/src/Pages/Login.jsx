@@ -62,22 +62,6 @@ const Login = () => {
                   onSubmit={handleSubmit(onSubmit)}
                   noValidate
                 >
-                  {/* <div>
-                    <label htmlFor="username" className="sr-only">
-                      Username
-                    </label>
-
-                    <Input
-                      id="username"
-                      placeholder="Username"
-                      defaultValue=""
-                      name="username"
-                      required
-                      {...register('username', userNameRules)}
-                      error={errors.username}
-                    />
-                  </div> */}
-
                   <div>
                     <label htmlFor="email" className="sr-only">
                       Email
@@ -86,7 +70,7 @@ const Login = () => {
                       type="email"
                       id="email"
                       placeholder="Enter your email"
-                      defaultValue=""
+                      defaultValue="test@test.com"
                       name="email"
                       required
                       {...register('email', emailRules)}
@@ -102,7 +86,7 @@ const Login = () => {
                       type="text"
                       id="password"
                       placeholder="Enter your password"
-                      defaultValue=""
+                      defaultValue="test1"
                       name="password"
                       required
                       {...register('password', passwordRules)}
