@@ -1,9 +1,37 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../config';
+import { useForm } from 'react-hook-form';
+import { emailRules, passwordRules } from '../helpers/validationRules';
+import Input from '../Components/atoms/Input';
+import userApi from '../api/modules/user.api';
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async data => {
+    const { response, err } = await userApi.login(data);
+
+    if (response) {
+      localStorage.setItem(
+        LOCAL_STORAGE_TOKEN_NAME,
+        JSON.stringify(response.token)
+      );
+      localStorage.setItem('user', JSON.stringify(response));
+      navigate('/home');
+    }
+    if (err) {
+      alert(JSON.stringify(err, null, 2));
+    }
+  };
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  console.log('errors', errors);
 
   return (
     <div className="container flex-1">
@@ -20,7 +48,7 @@ const Login = () => {
                 <div>
                   <div className="mt-3 text-left sm:mt-5">
                     <div className="inline-flex items-center w-full">
-                      <h3 className="text-lg font-bold text-neutral-600 l eading-6 lg:text-5xl">
+                      <h3 className="text-3xl font-bold text-gray-700 l eading-6 lg:text-5xl">
                         Login
                       </h3>
                     </div>
@@ -29,50 +57,78 @@ const Login = () => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-6 space-y-2">
+                <form
+                  className="mt-6 space-y-4"
+                  onSubmit={handleSubmit(onSubmit)}
+                  noValidate
+                >
+                  {/* <div>
+                    <label htmlFor="username" className="sr-only">
+                      Username
+                    </label>
+
+                    <Input
+                      id="username"
+                      placeholder="Username"
+                      defaultValue=""
+                      name="username"
+                      required
+                      {...register('username', userNameRules)}
+                      error={errors.username}
+                    />
+                  </div> */}
+
                   <div>
                     <label htmlFor="email" className="sr-only">
                       Email
                     </label>
-                    <input
-                      type="text"
-                      name="email"
+                    <Input
+                      type="email"
                       id="email"
-                      className="block w-full px-5 py-3 text-base placeholder-gray-400 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
                       placeholder="Enter your email"
+                      defaultValue=""
+                      name="email"
+                      required
+                      {...register('email', emailRules)}
+                      error={errors.email}
                     />
                   </div>
+
                   <div>
                     <label htmlFor="password" className="sr-only">
                       Password
                     </label>
-                    <input
+                    <Input
                       type="text"
-                      name="password"
                       id="password"
-                      className="block w-full px-5 py-3 text-base placeholder-gray-400 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300"
                       placeholder="Enter your password"
+                      defaultValue=""
+                      name="password"
+                      required
+                      {...register('password', passwordRules)}
+                      error={errors.password}
                     />
                   </div>
+
                   <div className="flex flex-col mt-4 lg:space-y-2">
                     <button
-                      onClick={() => {
-                        localStorage.setItem(
-                          LOCAL_STORAGE_TOKEN_NAME,
-                          JSON.stringify('test')
-                        );
+                      // onClick={() => {
+                      //   localStorage.setItem(
+                      //     LOCAL_STORAGE_TOKEN_NAME,
+                      //     JSON.stringify('test')
+                      //   );
 
-                        navigate('/home');
-                      }}
-                      type="button"
+                      //   navigate('/home');
+                      // }}
+                      type="submit"
                       className="flex items-center justify-center w-full px-10 py-4 text-base font-medium text-center text-white capitalize transition duration-500 ease-in-out transform bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       login
                     </button>
                   </div>
-                </div>
+                </form>
               </div>
-              <div className="order-first hidden w-full lg:block">
+              <div className="order-first hidden w-full h-full lg:block">
                 <img
                   className="object-cover h-full bg-cover rounded-l-lg"
                   src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"

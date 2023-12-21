@@ -2,20 +2,14 @@ import jsonwebtoken from 'jsonwebtoken';
 import responseHandler from '../handlers/response.handler.js';
 import userModel from '../models/user.model.js';
 
-const signup = async (req, res) => {
+const register = async (req, res) => {
   try {
-    // const test = {
-    //   username: 'test',
-    //   email: 'test@test.com',
-    //   password: 'test',
-    // };
-
     const { username, email, password } = req.body;
 
-    const checkUser = await userModel.findOne({ username });
+    const checkUser = await userModel.findOne({ email });
 
     if (checkUser) {
-      return responseHandler.badrequest(res, 'username already used');
+      return responseHandler.badrequest(res, 'email already used');
     }
 
     const user = new userModel();
@@ -32,17 +26,21 @@ const signup = async (req, res) => {
       { expiresIn: '24h' }
     );
 
+    console.log('user', user);
+
     responseHandler.created(res, {
-      token,
-      ...user._doc,
+      username: user.username,
+      email: user.email,
       id: user.id,
+      token,
+      // ...user._doc,
     });
   } catch {
     responseHandler.error(res);
   }
 };
 
-const signin = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -103,8 +101,8 @@ const getTest = async (req, res) => {
 };
 
 export default {
-  signup,
-  signin,
+  register,
+  login,
   getInfo,
   getTest,
 };

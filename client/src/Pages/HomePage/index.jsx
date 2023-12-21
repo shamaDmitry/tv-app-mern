@@ -1,15 +1,8 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import peopleApi from '../../api/modules/people.api';
 import Title from '../../Components/atoms/Title';
 import ShowCard from '../../Components/Content/ShowCard';
 
 const Index = () => {
-  useEffect(() => {
-    peopleApi.getPersonDetail({ personId: 1 });
-    return () => {};
-  }, []);
-
   return (
     <div className="container mb-20">
       <div className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-3">

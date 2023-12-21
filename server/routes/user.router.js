@@ -8,7 +8,7 @@ import userModel from '../models/user.model.js';
 const router = express.Router();
 
 router.post(
-  '/signup',
+  '/register',
   body('username')
     .exists()
     .withMessage('username is required')
@@ -27,11 +27,11 @@ router.post(
     .isLength({ min: 5 })
     .withMessage('password minimum 5 characters'),
   requestHandler.validate,
-  userController.signup
+  userController.register
 );
 
 router.post(
-  '/signin',
+  '/login',
   body('email').exists().withMessage('email is required').trim().isEmail(),
   body('password')
     .exists()
@@ -39,7 +39,7 @@ router.post(
     .isLength({ min: 5 })
     .withMessage('password minimum 5 characters'),
   requestHandler.validate,
-  userController.signin
+  userController.login
 );
 
 router.get('/info', userController.getInfo);
