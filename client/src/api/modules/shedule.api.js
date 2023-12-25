@@ -1,4 +1,4 @@
-import publicClient from '../client/public.client';
+import externalClient from '../client/external.client';
 
 const sheduleEndpoints = {
   getSchedule: ({ query }) => `/schedule?${query}`,
@@ -8,18 +8,14 @@ const sheduleEndpoints = {
 const sheduleApi = {
   getSchedule: async () => {
     try {
-      const response = await publicClient.get(
-        sheduleEndpoints.getFullSchedule()
-      );
-
-      return { response };
+      return await externalClient.get(sheduleEndpoints.getFullSchedule());
     } catch (err) {
       return { err };
     }
   },
   getFullSchedule: async () => {
     try {
-      const response = await publicClient.get(
+      const response = await externalClient.get(
         sheduleEndpoints.getFullSchedule()
       );
 

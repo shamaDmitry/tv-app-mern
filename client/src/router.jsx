@@ -15,6 +15,7 @@ import ShowsPage from './Pages/ShowsPage';
 import ShowPage from './Pages/ShowPage';
 import HomePage from './Pages/HomePage';
 import PeoplePage from './Pages/PeoplePage';
+import PersonPage from './Pages/PersonPage';
 
 import { authLoader } from './loaders/authLoader';
 
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
         <Route path="/shows" element={<ShowsPage />} />
         <Route path="/show/:id" element={<ShowPage />} />
         <Route path="/people" element={<PeoplePage />} />
+        <Route path="/people/:id" element={<PersonPage />} />
       </Route>
 
       <Route path="*" element={<Page_404 />} />

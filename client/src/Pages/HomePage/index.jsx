@@ -1,19 +1,44 @@
 import { Link } from 'react-router-dom';
 import Title from '../../Components/atoms/Title';
 import ShowCard from '../../Components/Content/ShowCard';
+import { useEffect } from 'react';
+import showsApi from '../../api/modules/shows.api';
+import { sortBy } from 'lodash';
+import { useState } from 'react';
+import Spinner from '../../Components/atoms/Spinner';
 
 const Index = () => {
+  const [popular, setPopular] = useState([]);
+
+  useEffect(() => {
+    showsApi.getAllShows().then(res => {
+      setPopular(() =>
+        sortBy(res, [
+          function (o) {
+            return -o.rating.average;
+          },
+        ]).slice(0, 8)
+      );
+    });
+    return () => {};
+  }, []);
+
   return (
     <div className="container mb-20">
       <div className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-3">
         <section className="md:col-span-2">
-          <Title>Popular shows airing tonight</Title>
+          <Title>Popular shows</Title>
 
           <div className="mb-10">
             <div className="grid grid-cols-2 gap-4 mb-8 sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3">
-              {new Array(5).fill(1).map((item, index) => {
-                return <ShowCard key={index} />;
-              })}
+              {!popular && (
+                <Spinner className="m-4 mx-auto border-blue-500"></Spinner>
+              )}
+
+              {popular &&
+                popular.map((item, index) => {
+                  return <ShowCard key={index} data={item} />;
+                })}
             </div>
 
             <Link
@@ -21,21 +46,6 @@ const Index = () => {
               className="inline-flex px-4 py-2 text-teal-600 transition border border-teal-600 hover:bg-teal-600 hover:text-white"
             >
               More shows
-            </Link>
-          </div>
-
-          <div className="mb-10">
-            <div className="grid grid-cols-2 gap-4 mb-5 md:gap-5 md:grid-cols-3 lg:grid-cols-5">
-              {new Array(5).fill(1).map((item, index) => {
-                return <ShowCard key={index} />;
-              })}
-            </div>
-
-            <Link
-              to="/shows"
-              className="inline-flex px-4 py-2 text-teal-600 transition border border-teal-600 hover:bg-teal-600 hover:text-white"
-            >
-              Countdown
             </Link>
           </div>
         </section>

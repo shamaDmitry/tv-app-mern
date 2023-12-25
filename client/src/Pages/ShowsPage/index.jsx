@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import showsApi from '../../api/modules/shows.api';
 import Title from '../../Components/atoms/Title';
+import ShowCard from '../../Components/Content/ShowCard';
+import Spinner from '../../Components/atoms/Spinner';
 
 const Index = () => {
   const [shows, setShows] = useState(null);
@@ -16,12 +18,14 @@ const Index = () => {
   return (
     <div className="container mb-10">
       <Title>ShowsPage</Title>
+      {!shows && <Spinner className="m-4 mx-auto border-blue-500"></Spinner>}
+
       {shows && (
-        <ol className='grid grid-cols-5 list-decimal gap-x-4'>
+        <div className="grid grid-cols-5 gap-4">
           {shows.map(show => (
-            <li key={show.id}>{show.name}</li>
+            <ShowCard key={show.id} data={show} />
           ))}
-        </ol>
+        </div>
       )}
     </div>
   );
