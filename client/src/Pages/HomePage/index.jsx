@@ -3,14 +3,30 @@ import Title from '../../Components/atoms/Title';
 import ShowCard from '../../Components/Content/ShowCard';
 import { useEffect } from 'react';
 import showsApi from '../../api/modules/shows.api';
-import { sortBy } from 'lodash';
+import { groupBy, sortBy } from 'lodash';
 import { useState } from 'react';
 import Spinner from '../../Components/atoms/Spinner';
+import sheduleApi from '../../api/modules/shedule.api';
+import userApi from '../../api/modules/user.api';
+import dayjs from 'dayjs';
+import CountrySelector from '../../Components/atoms/CountrySelector';
 
 const Index = () => {
   const [popular, setPopular] = useState([]);
+  const [countryCode] = useState(() => localStorage.getItem('countryCode'));
+  const [country, setCountry] = useState('US');
+  const [schedule, setSchedule] = useState([]);
+  const [today] = useState(dayjs().format('DD MMMM YYYY'));
 
   useEffect(() => {
+    userApi.myInfo();
+
+    sheduleApi
+      .getSchedule({ country: country, date: dayjs().format('YYYY-MM-DD') })
+      .then(res => {
+        setSchedule(() => groupBy(res, 'airtime'));
+      });
+
     showsApi.getAllShows().then(res => {
       setPopular(() =>
         sortBy(res, [
@@ -21,7 +37,7 @@ const Index = () => {
       );
     });
     return () => {};
-  }, []);
+  }, [country]);
 
   return (
     <div className="container mb-20">
@@ -51,93 +67,61 @@ const Index = () => {
         </section>
 
         <section className="md:col-span-1">
-          <Title>Schedule for Oct 10</Title>
+          <Title>{`${today}`}</Title>
 
-          <div className="border">
-            <div className="px-3 py-2 font-bold text-white bg-slate-950">
-              20-00
-            </div>
-            <div className="flex gap-4 p-2 leading-6 odd:bg-gray-100">
-              <div className="w-2/12 text-center">
-                <div>20-00</div>
-                <div>
-                  <Link to="/" className="text-teal-600">
-                    ESPN+
-                  </Link>
+          <CountrySelector
+            value={country}
+            onChange={e => {
+              setCountry(e.target.value);
+            }}
+          />
+
+          {!Object.keys(schedule).length && <p>nothing is here</p>}
+
+          <div className="overflow-auto max-h-96">
+            {Object.keys(schedule).map(key => {
+              return (
+                <div className="border" key={key}>
+                  <div className="px-3 py-2 font-bold text-center text-white bg-slate-950">
+                    {key}
+                  </div>
+
+                  {schedule[key].map(oneShow => {
+                    return (
+                      <div
+                        className="grid grid-cols-2 gap-4 p-2 leading-6 odd:bg-gray-100"
+                        key={oneShow.id}
+                      >
+                        <div className="text-center">
+                          <div>{key}</div>
+                          <div>
+                            <div className="font-bold">
+                              {oneShow.show.network?.name}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col text-teal-600">
+                          <Link
+                            to={`/shows/${oneShow.show.id}`}
+                            className="overflow-hidden font-bold whitespace-nowrap text-ellipsis"
+                          >
+                            {oneShow.show.name}
+                          </Link>
+
+                          <Link
+                            to={`/episodes/${oneShow.id}`}
+                            className="text-sm"
+                          >
+                            {oneShow.name}
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
-
-              <div className="w-10/12 text-teal-600">
-                <div className="overflow-hidden font-bold whitespace-nowrap text-ellipsis">
-                  Dana White's Tuesday Night Contender Series Dana White's
-                  Tuesday Night Contender Series
-                </div>
-
-                <div className="text-sm">Episode 29</div>
-              </div>
-            </div>
-
-            <div className="flex gap-4 py-2 leading-6 odd:bg-gray-100">
-              <div className="w-1/5 text-center">
-                <div>20-00</div>
-                <div>
-                  <Link to="/" className="text-teal-600">
-                    ESPN+
-                  </Link>
-                </div>
-              </div>
-
-              <div className="w-[80%] text-teal-600">
-                <div className="overflow-hidden font-bold whitespace-nowrap text-ellipsis">
-                  Dana White's Tuesday Night Contender Series Dana White's
-                  Tuesday Night Contender Series
-                </div>
-
-                <div className="text-sm">Episode 29</div>
-              </div>
-            </div>
-            <div className="px-3 py-2 font-bold text-white bg-slate-950">
-              20-00
-            </div>
-            <div className="flex gap-4 py-2 leading-6 odd:bg-gray-100">
-              <div className="w-1/5 text-center">
-                <div>20-00</div>
-                <div>
-                  <Link to="/" className="text-teal-600">
-                    ESPN+
-                  </Link>
-                </div>
-              </div>
-
-              <div className="w-[80%] text-teal-600">
-                <div className="overflow-hidden font-bold whitespace-nowrap text-ellipsis">
-                  Dana White's Tuesday Night Contender Series Dana White's
-                  Tuesday Night Contender Series
-                </div>
-
-                <div className="text-sm">Episode 29</div>
-              </div>
-            </div>
-
-            <div className="flex gap-4 py-2 leading-6 odd:bg-gray-100">
-              <div className="w-1/5 text-center">
-                <div>20-00</div>
-                <div>
-                  <Link to="/" className="text-teal-600">
-                    ESPN+
-                  </Link>
-                </div>
-              </div>
-
-              <div className="w-[80%] text-teal-600">
-                <div className="overflow-hidden font-bold whitespace-nowrap text-ellipsis">
-                  Dana White's Tuesday Night Contender Series Dana White's
-                  Tuesday Night Contender Series
-                </div>
-
-                <div className="text-sm">Episode 29</div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </section>
       </div>

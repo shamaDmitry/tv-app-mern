@@ -26,8 +26,6 @@ const register = async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    console.log('user', user);
-
     responseHandler.created(res, {
       username: user.username,
       email: user.email,

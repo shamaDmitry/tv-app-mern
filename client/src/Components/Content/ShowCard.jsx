@@ -10,13 +10,13 @@ const ShowCard = ({ data, className }) => {
       )}
     >
       <figure className="min-h-[50px] flex-1 flex flex-col">
-        <Link to={`/show/${data.id}`}>
+        <Link to={`/shows/${data.id}`}>
           <img className="w-full" src={data.image.medium} alt="The Voice" />
         </Link>
 
         <figcaption className="flex-1 p-3 text-white bg-teal-600">
           <h2 className="flex items-start gap-2 mb-2 font-semibold">
-            <Link to={`/show/${data.id}`} className="flex-1 hover:underline">
+            <Link to={`/shows/${data.id}`} className="flex-1 hover:underline">
               {data.name}
             </Link>
 

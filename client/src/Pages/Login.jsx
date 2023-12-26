@@ -31,8 +31,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log('errors', errors);
-
   return (
     <div className="container flex-1">
       <section>

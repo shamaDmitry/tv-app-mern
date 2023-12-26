@@ -1,25 +1,23 @@
 import externalClient from '../client/external.client';
 
 const sheduleEndpoints = {
-  getSchedule: ({ query }) => `/schedule?${query}`,
-  getFullSchedule: () => `schedule/full`,
+  getSchedule: `/schedule`,
+  getFullSchedule: `schedule/full`,
 };
 
 const sheduleApi = {
-  getSchedule: async () => {
+  getSchedule: async params => {
     try {
-      return await externalClient.get(sheduleEndpoints.getFullSchedule());
+      return await externalClient.get(sheduleEndpoints.getSchedule, {
+        params,
+      });
     } catch (err) {
       return { err };
     }
   },
   getFullSchedule: async () => {
     try {
-      const response = await externalClient.get(
-        sheduleEndpoints.getFullSchedule()
-      );
-
-      return { response };
+      return await externalClient.get(sheduleEndpoints.getFullSchedule);
     } catch (err) {
       return { err };
     }

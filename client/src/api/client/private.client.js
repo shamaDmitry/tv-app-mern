@@ -6,8 +6,6 @@ const privateClient = axios.create({
   baseURL: API_URL,
   paramsSerializer: {
     encode: params => {
-      console.log('private.client params', params);
-
       return queryString.stringify(params);
     },
   },

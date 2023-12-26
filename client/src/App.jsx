@@ -9,7 +9,6 @@ function App() {
 
   const getData = async () => {
     const response = await publicClient.get(`${API_URL}/test`);
-    console.log(response);
   };
 
   useEffect(() => {
