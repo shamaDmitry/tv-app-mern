@@ -67,7 +67,7 @@ const Index = () => {
         </section>
 
         <section className="md:col-span-1">
-          <Title>{`${today}`}</Title>
+          <Title>{`Schedule for ${today}`}</Title>
 
           <CountrySelector
             value={country}

@@ -1,10 +1,11 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/icons/Logo';
 import { v4 as uuidv4 } from 'uuid';
 import { Menu } from '@headlessui/react';
 import classNames from 'classnames';
 import { useState } from 'react';
 import Avatar from '../atoms/Avatar';
+import SearchBar from './SearchBar';
 
 const menuItems = [
   {
@@ -26,7 +27,6 @@ const menuItems = [
 
 const Header = () => {
   const navigate = useNavigate();
-
   const [user] = useState(() => JSON.parse(localStorage.getItem('user')));
 
   return (
@@ -60,6 +60,8 @@ const Header = () => {
               })}
             </nav>
           </div>
+
+          <SearchBar />
 
           <div className="flex gap-4">
             <Menu className="relative" as="div">
