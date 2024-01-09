@@ -10,24 +10,16 @@ import sheduleApi from '../../api/modules/shedule.api';
 import userApi from '../../api/modules/user.api';
 import dayjs from 'dayjs';
 import CountrySelector from '../../Components/atoms/CountrySelector';
+import PopularShowList from './PopularShowList';
 
 const Index = () => {
   const [popular, setPopular] = useState([]);
-  const [countryCode] = useState(() => localStorage.getItem('countryCode'));
   const [country, setCountry] = useState('US');
   const [schedule, setSchedule] = useState([]);
   const [today] = useState(dayjs().format('DD MMMM YYYY'));
 
   useEffect(() => {
-    userApi.myInfo();
-
-    sheduleApi
-      .getSchedule({ country: country, date: dayjs().format('YYYY-MM-DD') })
-      .then(res => {
-        setSchedule(() => groupBy(res, 'airtime'));
-      });
-
-    showsApi.getAllShows().then(res => {
+    showsApi.getAllShows({ embed: 'nextepisode' }).then(res => {
       setPopular(() =>
         sortBy(res, [
           function (o) {
@@ -37,6 +29,17 @@ const Index = () => {
       );
     });
     return () => {};
+  }, []);
+
+  useEffect(() => {
+    userApi.myInfo();
+
+    sheduleApi
+      .getSchedule({ country: country, date: dayjs().format('YYYY-MM-DD') })
+      .then(res => {
+        setSchedule(() => groupBy(res, 'airtime'));
+      });
+    return () => {};
   }, [country]);
 
   return (
@@ -45,25 +48,7 @@ const Index = () => {
         <section className="md:col-span-2">
           <Title>Popular shows</Title>
 
-          <div className="mb-10">
-            <div className="grid grid-cols-2 gap-4 mb-8 sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3">
-              {!popular && (
-                <Spinner className="m-4 mx-auto border-blue-500"></Spinner>
-              )}
-
-              {popular &&
-                popular.map((item, index) => {
-                  return <ShowCard key={index} data={item} />;
-                })}
-            </div>
-
-            <Link
-              to="/shows"
-              className="inline-flex px-4 py-2 text-teal-600 transition border border-teal-600 hover:bg-teal-600 hover:text-white"
-            >
-              More shows
-            </Link>
-          </div>
+          <PopularShowList popular={popular} />
         </section>
 
         <section className="md:col-span-1">
@@ -78,7 +63,7 @@ const Index = () => {
 
           {!Object.keys(schedule).length && <p>nothing is here</p>}
 
-          <div className="overflow-auto max-h-96">
+          <div className="overflow-x-hidden overflow-y-auto max-h-96">
             {Object.keys(schedule).map(key => {
               return (
                 <div className="border" key={key}>
@@ -86,34 +71,35 @@ const Index = () => {
                     {key}
                   </div>
 
-                  {schedule[key].map(oneShow => {
+                  {schedule[key].map(episode => {
                     return (
                       <div
-                        className="grid grid-cols-2 gap-4 p-2 leading-6 odd:bg-gray-100"
-                        key={oneShow.id}
+                        className="flex gap-4 p-2 leading-6 odd:bg-gray-100"
+                        key={episode.id}
                       >
-                        <div className="text-center">
+                        <div className="w-24 text-center shrink-0">
                           <div>{key}</div>
                           <div>
                             <div className="font-bold">
-                              {oneShow.show.network?.name}
+                              {episode.show.network?.name}
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex flex-col text-teal-600">
+                        <div className="flex flex-col max-w-xs text-teal-600">
                           <Link
-                            to={`/shows/${oneShow.show.id}`}
-                            className="overflow-hidden font-bold whitespace-nowrap text-ellipsis"
+                            to={`/episodes/${episode.id}`}
+                            state={{ showId: episode.show.id }}
+                            className="w-full overflow-hidden font-bold whitespace-nowrap text-ellipsis"
                           >
-                            {oneShow.show.name}
+                            {episode.name}
                           </Link>
 
                           <Link
-                            to={`/episodes/${oneShow.id}`}
+                            to={`/shows/${episode.show.id}`}
                             className="text-sm"
                           >
-                            {oneShow.name}
+                            {episode.show.name}
                           </Link>
                         </div>
                       </div>

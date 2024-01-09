@@ -6,7 +6,7 @@ const Index = () => {
 
   return (
     <section className="container">
-      <Title>Episodes page</Title>
+      <Title>Episode page</Title>
       <pre>{JSON.stringify(params, null, 2)}</pre>
     </section>
   );

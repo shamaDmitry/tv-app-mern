@@ -17,6 +17,7 @@ import HomePage from './Pages/HomePage';
 import PeoplePage from './Pages/PeoplePage';
 import PersonPage from './Pages/PersonPage';
 import EpisodesPage from './Pages/EpisodesPage';
+import EpisodePage from './Pages/EpisodePage';
 import SearchPage from './Pages/SearchPage';
 
 import { authLoader } from './loaders/authLoader';
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
         <Route path="/shows" element={<ShowsPage />} />
         <Route path="/shows/:id" element={<ShowPage />} />
         <Route path="/episodes/:id" element={<EpisodesPage />} />
+        <Route path="/shows/:id/episode/:episodId" element={<EpisodePage />} />
         <Route path="/people" element={<PeoplePage />} />
         <Route path="/people/:id" element={<PersonPage />} />
         <Route path="search" element={<SearchPage />} />

@@ -25,11 +25,6 @@ const ShowCard = ({ data, className }) => {
               {data.rating.average}
             </p>
           </h2>
-          <h3 className="leading-5">
-            <Link to="/next-episode" className="hover:underline">
-              The Blind Auditions, Part 6
-            </Link>
-          </h3>
         </figcaption>
       </figure>
     </div>

@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/icons/Logo';
 import { v4 as uuidv4 } from 'uuid';
 import { Menu } from '@headlessui/react';
@@ -28,6 +28,7 @@ const menuItems = [
 const Header = () => {
   const navigate = useNavigate();
   const [user] = useState(() => JSON.parse(localStorage.getItem('user')));
+  const [countryCode] = useState(() => localStorage.getItem('countryCode'));
 
   return (
     <header className="mb-5 bg-white">
@@ -65,7 +66,7 @@ const Header = () => {
 
           <div className="flex gap-4">
             <Menu className="relative" as="div">
-              <Menu.Button className="flex items-center gap-x-2">
+              <Menu.Button className="flex gap-x-2">
                 {user.image ? (
                   <img
                     alt="Man"
@@ -80,9 +81,12 @@ const Header = () => {
                   <span className="text-sm font-bold text-slate-900">
                     {user.username}
                   </span>
+
                   <span className="text-sm font-medium text-gray-500">
                     {user.email}
                   </span>
+
+                  <span className="text-xs text-gray-400">{countryCode}</span>
                 </div>
               </Menu.Button>
 

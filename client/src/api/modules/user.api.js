@@ -38,6 +38,7 @@ const userApi = {
   myInfo: async () => {
     try {
       const code = localStorage.getItem('countryCode');
+      
       if (!code) {
         const response = await axios.get(userEndpoints.myInfo);
 
