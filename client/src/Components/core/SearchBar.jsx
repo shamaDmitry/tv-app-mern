@@ -16,7 +16,7 @@ const SearchBar = () => {
   const [term, setTerm] = useState('');
 
   useEffect(() => {
-    if (location.search) {
+    if (location.pathname === '/search' && location.search) {
       let params = new URLSearchParams(location.search);
       let term = params.get('term');
       setTerm(term);
