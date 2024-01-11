@@ -15,7 +15,7 @@ const Paginate = ({
   }
 
   return (
-    <div className="px-4 pb-4 overflow-hidden overflow-x-auto">
+    <div className="pb-4 mx-4 overflow-hidden overflow-x-auto">
       <div className="flex gap-x-2">
         {/* <div onClick={previousPage} className="page-number">
           Prev

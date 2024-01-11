@@ -17,9 +17,7 @@ const Index = () => {
   const indexOfLast = index * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentData = people.slice(indexOfFirst, indexOfLast);
-
-  console.log('indexOfLast', indexOfLast);
-  console.log('currentData', currentData);
+  const totalPages = Math.ceil(people.length / itemsPerPage);
 
   useEffect(() => {
     peopleApi.getAllPeople({ page }).then(response => {
@@ -58,7 +56,9 @@ const Index = () => {
             <button
               onClick={() => {
                 setIndex(1);
-                setPage(prevState => prevState - 1);
+                if (page !== 0) {
+                  setPage(prevState => prevState - 1);
+                }
               }}
               className="flex items-center px-3 py-1 text-sm capitalize border gap-x-2"
             >
@@ -76,13 +76,15 @@ const Index = () => {
               <GrNext />
             </button>
 
-            <div className="flex flex-col justify-center max-w-full">
-              <div className="py-2 text-center">
-                <span>Current page:</span> {page + 1}
-              </div>
+            <div className="flex flex-col justify-center w-full max-w-full">
+              <div className="flex justify-center gap-x-4">
+                <div className="py-2 text-center">
+                  <span>Current page:</span> {page + 1}
+                </div>
 
-              <div className="py-2 text-center">
-                {index} / {people.length}
+                <div className="py-2 text-center">
+                  {index} / {totalPages}
+                </div>
               </div>
 
               <Paginate
@@ -96,7 +98,7 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 list-decimal md:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
             {currentData.map(person => (
               <PersonCard key={person.id} data={person} />
             ))}

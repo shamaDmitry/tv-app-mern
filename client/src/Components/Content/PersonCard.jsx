@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Link } from 'react-router-dom';
 
 const PersonCard = ({ data }) => {
@@ -12,7 +13,7 @@ const PersonCard = ({ data }) => {
     >
       <figure className="min-h-[50px] flex-1 flex flex-col">
         <div>
-          <img
+          <LazyLoadImage
             className="w-full h-auto"
             src={data.image?.medium || 'https://placehold.co/300x300'}
             alt={data.name}

@@ -5,10 +5,8 @@ import { Link } from 'react-router-dom';
 const PopularShowList = ({ popular }) => {
   return (
     <div className="mb-10">
-      <div className="grid grid-cols-2 gap-4 mb-8 sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3">
-        {!popular && (
-          <Spinner className="m-4 mx-auto border-blue-500"></Spinner>
-        )}
+      <div className="grid grid-cols-2 gap-4 mb-8 sm:grid-cols-3 xl:grid-cols-4">
+        {!popular && <Spinner className="m-4 mx-auto border-blue-500" />}
 
         {popular &&
           popular.map((item, index) => {

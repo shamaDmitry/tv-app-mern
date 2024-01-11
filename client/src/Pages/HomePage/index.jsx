@@ -45,13 +45,13 @@ const Index = () => {
   return (
     <div className="container mb-20">
       <div className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-3">
-        <section className="md:col-span-2">
+        <section className="order-2 md:order-1 md:col-span-2">
           <Title>Popular shows</Title>
 
           <PopularShowList popular={popular} />
         </section>
 
-        <section className="md:col-span-1">
+        <section className="order-1 md:order-2 md:col-span-1">
           <Title>{`Schedule for ${today}`}</Title>
 
           <CountrySelector
@@ -88,7 +88,7 @@ const Index = () => {
 
                         <div className="flex flex-col max-w-xs text-teal-600">
                           <Link
-                            to={`/episodes/${episode.id}`}
+                            to={`/episode/${episode.id}`}
                             state={{ showId: episode.show.id }}
                             className="w-full overflow-hidden font-bold whitespace-nowrap text-ellipsis"
                           >

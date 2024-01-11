@@ -1,17 +1,18 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Title from '../../Components/atoms/Title';
 import showsApi from '../../api/modules/shows.api';
 import { useEffect, useState } from 'react';
 import Spinner from '../../Components/atoms/Spinner';
 import { GrPrevious } from 'react-icons/gr';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Index = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [show, setShow] = useState(null);
 
   useEffect(() => {
     showsApi.getShow(params.id, { embed: ['episodes', 'cast'] }).then(show => {
-      console.log(show);
       setShow(show);
     });
     return () => {};
@@ -27,20 +28,20 @@ const Index = () => {
   return (
     <section className="container">
       <div className="mb-2">
-        <Link
-          to={'/home'}
+        <button
+          onClick={() => navigate(-1)}
           className="inline-flex items-center text-sm font-bold text-teal-600 uppercase transition hover:opacity-50 gap-x-1"
         >
-          <GrPrevious></GrPrevious>
+          <GrPrevious />
           back
-        </Link>
+        </button>
       </div>
 
       <Title>{show.name}</Title>
 
       <div className="flex flex-col justify-start gap-4 mb-6 md:flex-row">
-        <img
-          src={show.image.medium}
+        <LazyLoadImage
+          src={show.image?.medium || 'https://placehold.co/300x300'}
           className="block max-w-xs mx-auto overflow-hidden border rounded"
           alt=""
         />
@@ -100,52 +101,78 @@ const Index = () => {
         <p dangerouslySetInnerHTML={{ __html: show.summary }}></p>
       </div>
 
-      <section className="mb-4">
-        <h1 className="mb-3 text-lg font-medium">Episodes</h1>
-        <div className="grid grid-cols-3">
-          {show._embedded.episodes.map(episode => {
-            return <div key={episode.id}>{episode.name}</div>;
-          })}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="mb-4">
+          <h1 className="mb-3 text-lg font-medium">Episodes</h1>
+
+          {show._embedded.episodes ? (
+            <ol className="grid grid-cols-1 overflow-y-auto list-decimal list-inside h-96 md:grid-cols-2">
+              {show._embedded.episodes.map(episode => {
+                return (
+                  <li key={episode.id}>
+                    <Link to={`/episode/${episode.id}`}>{episode.name}</Link>
+                  </li>
+                );
+              })}
+            </ol>
+          ) : (
+            <p>nothing is here</p>
+          )}
         </div>
-      </section>
 
-      <section className="mb-4">
-        <h1 className="mb-3 text-lg font-medium">Cast</h1>
-        <div className="grid grid-cols-4 gap-4">
-          {show._embedded.cast.map((castItem, index) => {
-            return (
-              <div key={index} className="flex justify-center gap-4 p-4 border">
-                <div>
-                  <p>Character</p>
-                  <img
-                    className="w-32"
-                    src={
-                      castItem.character?.image?.medium ||
-                      'https://placehold.co/300x300'
-                    }
-                    alt=""
-                  />
-                  <h5>{castItem.character.name}</h5>
-                </div>
+        <div className="mb-4">
+          <h1 className="mb-3 text-lg font-medium">Cast</h1>
 
-                <div>
-                  <p>Person</p>
+          {show._embedded.cast.length ? (
+            <div className="grid grid-cols-2 gap-4 overflow-y-auto h-96">
+              {show._embedded.cast.map((castItem, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex justify-center gap-4 p-4 border"
+                  >
+                    <div className="flex-1">
+                      <p className="mb-1 text-sm text-gray-400">Character</p>
+                      <LazyLoadImage
+                        className="w-full"
+                        src={
+                          castItem.character?.image?.medium ||
+                          'https://placehold.co/300x300'
+                        }
+                        alt={castItem.character.name}
+                      />
+                      <h5 className="mt-2 font-medium">
+                        {castItem.character.name}
+                      </h5>
+                    </div>
 
-                  <img
-                    className="w-32"
-                    src={
-                      castItem.person.image.medium ||
-                      'https://placehold.co/300x300'
-                    }
-                    alt=""
-                  />
-                  <h5>{castItem.person.name}</h5>
-                </div>
-              </div>
-            );
-          })}
+                    <Link
+                      to={`/people/${castItem.person.id}`}
+                      className="flex-1"
+                    >
+                      <p className="mb-1 text-sm text-gray-400">Person</p>
+
+                      <LazyLoadImage
+                        className="w-full"
+                        src={
+                          castItem.person.image?.medium ||
+                          'https://placehold.co/300x300'
+                        }
+                        alt={castItem.person.name}
+                      />
+                      <h5 className="mt-2 hover:text-teal-500">
+                        {castItem.person.name}
+                      </h5>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p>nothing is here</p>
+          )}
         </div>
-      </section>
+      </div>
     </section>
   );
 };

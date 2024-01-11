@@ -4,8 +4,13 @@ import { useForm } from 'react-hook-form';
 import { emailRules, passwordRules } from '../helpers/validationRules';
 import Input from '../Components/atoms/Input';
 import userApi from '../api/modules/user.api';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
+import Spinner from '../Components/atoms/Spinner';
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -13,18 +18,25 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async data => {
+    setLoading(true);
+
     const { response, err } = await userApi.login(data);
 
     if (response) {
+      setLoading(false);
+
       localStorage.setItem(
         LOCAL_STORAGE_TOKEN_NAME,
         JSON.stringify(response.token)
       );
       localStorage.setItem('user', JSON.stringify(response));
+      toast.success('success');
+
       navigate('/home');
     }
     if (err) {
-      alert(JSON.stringify(err, null, 2));
+      setLoading(false);
+      toast.error(err.response.data.message || err.message);
     }
   };
 
@@ -93,20 +105,15 @@ const Login = () => {
                   </div>
 
                   <div className="flex flex-col mt-4 lg:space-y-2">
-                    <button
-                      // onClick={() => {
-                      //   localStorage.setItem(
-                      //     LOCAL_STORAGE_TOKEN_NAME,
-                      //     JSON.stringify('test')
-                      //   );
-
-                      //   navigate('/home');
-                      // }}
-                      type="submit"
-                      className="flex items-center justify-center w-full px-10 py-4 text-base font-medium text-center text-white capitalize transition duration-500 ease-in-out transform bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      login
-                    </button>
+                    {loading && <Spinner className='mx-auto' />}
+                    {!loading && (
+                      <button
+                        type="submit"
+                        className="flex items-center justify-center w-full px-10 py-4 text-base font-medium text-center text-white capitalize transition duration-500 ease-in-out transform bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      >
+                        login
+                      </button>
+                    )}
                   </div>
                 </form>
               </div>

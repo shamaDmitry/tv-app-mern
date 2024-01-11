@@ -1,4 +1,5 @@
 import { Listbox, Transition } from '@headlessui/react';
+import classNames from 'classnames';
 import { useEffect } from 'react';
 import { Fragment, useState } from 'react';
 import { HiCheck, HiChevronUpDown } from 'react-icons/hi2';
@@ -9,7 +10,7 @@ const types = [
   { id: 2, name: 'people' },
 ];
 
-const SearchBar = () => {
+const SearchBar = ({ className }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState(types[0]);
@@ -42,8 +43,10 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="relative flex">
-      <div className="relative flex items-center">
+    <div
+      className={classNames(`relative flex ${className ? className : ''}`)}
+    >
+      <div className="relative flex items-center w-full">
         <span className="absolute ml-4 leading-none -translate-y-1/2 top-1/2 text-muted">
           <svg
             xmlns="http://www.w3.org/2000/svg"

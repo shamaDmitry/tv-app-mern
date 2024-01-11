@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Title from '../../Components/atoms/Title';
 import { useEffect } from 'react';
 import peopleApi from '../../api/modules/people.api';
@@ -6,9 +6,12 @@ import { useState } from 'react';
 import Spinner from '../../Components/atoms/Spinner';
 import { GrPrevious } from 'react-icons/gr';
 import dayjs from '../../utils/dayjs';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Index = () => {
   const params = useParams();
+  const navigate = useNavigate();
+
   const [person, setPerson] = useState(null);
 
   useEffect(() => {
@@ -21,26 +24,26 @@ const Index = () => {
   if (!person)
     return (
       <section className="container">
-        <Spinner></Spinner>
+        <Spinner />
       </section>
     );
 
   return (
     <section className="container max-w-5xl">
       <div className="mb-2">
-        <Link
-          to={'/people'}
+        <button
+          onClick={() => navigate(-1)}
           className="inline-flex items-center text-sm font-bold text-teal-600 uppercase transition hover:opacity-50 gap-x-1"
         >
-          <GrPrevious></GrPrevious>
+          <GrPrevious />
           back
-        </Link>
+        </button>
       </div>
 
       <Title>Person page</Title>
 
       <div className="flex flex-col justify-start gap-4 mb-6 md:flex-row">
-        <img
+        <LazyLoadImage
           src={person.image?.medium || 'https://placehold.co/300x300'}
           className="block max-w-xs mx-auto overflow-hidden border rounded"
           alt=""

@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const ShowCard = ({ data, className }) => {
   return (
@@ -11,7 +12,11 @@ const ShowCard = ({ data, className }) => {
     >
       <figure className="min-h-[50px] flex-1 flex flex-col">
         <Link to={`/shows/${data.id}`}>
-          <img className="w-full" src={data.image.medium} alt="The Voice" />
+          <LazyLoadImage
+            className="w-full"
+            src={data.image?.medium || 'https://placehold.co/300x300'}
+            alt={data.name}
+          />
         </Link>
 
         <figcaption className="flex-1 p-3 text-white bg-teal-600">
@@ -21,7 +26,7 @@ const ShowCard = ({ data, className }) => {
             </Link>
 
             <p className="flex items-center gap-1 text-sm font-medium text-yellow-300">
-              <FaStar></FaStar>
+              <FaStar />
               {data.rating.average}
             </p>
           </h2>
