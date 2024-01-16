@@ -50,9 +50,10 @@ const Header = () => {
                     key={item.id}
                     to={item.to}
                     className={({ isActive }) =>
-                      isActive
-                        ? 'capitalize underline'
-                        : 'capitalize text-gray-500 transition hover:text-gray-500/75'
+                      [
+                        'capitalize text-gray-500 transition hover:text-gray-500/75',
+                        isActive ? 'underline text-gray-900' : '',
+                      ].join(' ')
                     }
                   >
                     {item.text}
@@ -67,11 +68,11 @@ const Header = () => {
           <div className="flex justify-end flex-1 gap-4">
             <Menu className="relative" as="div">
               <Menu.Button className="flex gap-x-2">
-                {user.image ? (
+                {user.avatar ? (
                   <img
                     alt={user.username}
-                    src={user.image}
-                    className="object-cover w-10 h-10"
+                    src={user.avatar}
+                    className="object-cover w-12 h-12 rounded-full"
                   />
                 ) : (
                   <Avatar name={user.username} />
@@ -92,6 +93,24 @@ const Header = () => {
 
               <Menu.Items className="absolute right-0 flex flex-col justify-end mb-4 overflow-hidden bg-white border rounded top-full w-52">
                 <Menu.Item>
+                  {({ active }) => {
+                    return (
+                      <NavLink
+                        to="/profile"
+                        className={({ isActive, isPending, isTransitioning }) =>
+                          [
+                            'text-center font-bold capitalize text-primary-400 py-1 px-3 border-b last:border-b-0',
+                            active ? 'text-teal-600' : '',
+                            isActive ? 'text-teal-600' : '',
+                          ].join(' ')
+                        }
+                      >
+                        profile
+                      </NavLink>
+                    );
+                  }}
+                </Menu.Item>
+                <Menu.Item>
                   {({ active }) => (
                     <button
                       onClick={() => {
@@ -99,10 +118,9 @@ const Header = () => {
                         navigate('/');
                       }}
                       className={classNames(
-                        `font-bold text-primary-400 py-1 px-3 border-b last:border-b-0`,
-                        {
-                          'text-teal-600': active,
-                        }
+                        `font-bold text-primary-400 py-1 px-3 border-b last:border-b-0 ${
+                          active ? 'text-teal-600' : ''
+                        }`
                       )}
                     >
                       Logout

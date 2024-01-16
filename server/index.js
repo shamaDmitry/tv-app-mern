@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import 'dotenv/config';
 import routes from './routes/index.js';
 import responseHandler from './handlers/response.handler.js';
+import fileUpload from 'express-fileupload';
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(fileUpload());
 
 app.use('/api/v1', routes);
 app.use('/', (req, res) => responseHandler.ok(res, { msg: 'index page' }));

@@ -80,7 +80,7 @@ const Login = () => {
                       type="email"
                       id="email"
                       placeholder="Enter your email"
-                      defaultValue="test@test.com"
+                      defaultValue="avatar@avatar.com"
                       name="email"
                       required
                       {...register('email', emailRules)}
@@ -96,7 +96,7 @@ const Login = () => {
                       type="text"
                       id="password"
                       placeholder="Enter your password"
-                      defaultValue="test1"
+                      defaultValue="avatar"
                       name="password"
                       required
                       {...register('password', passwordRules)}

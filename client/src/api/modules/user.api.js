@@ -5,6 +5,7 @@ const userEndpoints = {
   myInfo: 'https://api.ipregistry.co/?key=w7rmsmjomkkb1u47',
   login: '/user/login',
   register: '/user/register',
+  avatarUpload: '/user/avatar-upload',
 };
 
 const userApi = {
@@ -14,6 +15,19 @@ const userApi = {
         email,
         password,
       });
+
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+
+  avatarUpload: async avatar => {
+    try {
+      const response = await publicClient.post(
+        userEndpoints.avatarUpload,
+        avatar
+      );
 
       return { response };
     } catch (err) {
@@ -38,7 +52,7 @@ const userApi = {
   myInfo: async () => {
     try {
       const code = localStorage.getItem('countryCode');
-      
+
       if (!code) {
         const response = await axios.get(userEndpoints.myInfo);
 

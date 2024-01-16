@@ -42,6 +42,8 @@ router.post(
   userController.login
 );
 
+router.post('/avatar-upload', userController.uploadAvatar);
+
 router.get('/info', userController.getInfo);
 
 export default router;

@@ -1,6 +1,7 @@
 import jsonwebtoken from 'jsonwebtoken';
 import responseHandler from '../handlers/response.handler.js';
 import userModel from '../models/user.model.js';
+import { put } from '@vercel/blob';
 
 const register = async (req, res) => {
   try {
@@ -38,13 +39,24 @@ const register = async (req, res) => {
   }
 };
 
+const uploadAvatar = async (req, res) => {
+  console.log(req.body);
+
+  // const blob = await put(req.files.avatar.name, req.files.avatar.data, {
+  //   access: 'public',
+  //   token: process.env.BLOB_READ_WRITE_TOKEN,
+  // });
+
+  // return responseHandler.ok(res, blob);
+};
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     const user = await userModel
       .findOne({ email })
-      .select('email username password salt id');
+      .select('email avatar username password salt id');
 
     if (!user) {
       return responseHandler.badrequest(res, 'User not exist');
@@ -103,4 +115,5 @@ export default {
   login,
   getInfo,
   getTest,
+  uploadAvatar,
 };

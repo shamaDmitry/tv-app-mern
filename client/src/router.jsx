@@ -18,6 +18,7 @@ import PeoplePage from './Pages/PeoplePage';
 import PersonPage from './Pages/PersonPage';
 import EpisodePage from './Pages/EpisodePage';
 import SearchPage from './Pages/SearchPage';
+import ProfilePage from './Pages/ProfilePage';
 
 import { authLoader } from './loaders/authLoader';
 
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
         <Route path="/people" element={<PeoplePage />} />
         <Route path="/people/:id" element={<PersonPage />} />
         <Route path="search" element={<SearchPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
 
       <Route path="*" element={<Page_404 />} />
