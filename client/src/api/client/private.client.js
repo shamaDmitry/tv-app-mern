@@ -15,7 +15,6 @@ privateClient.interceptors.request.use(async config => {
   return {
     ...config,
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${JSON.parse(
         localStorage.getItem(LOCAL_STORAGE_TOKEN_NAME)
       )}`,

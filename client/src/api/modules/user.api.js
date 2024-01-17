@@ -1,11 +1,12 @@
 import axios from 'axios';
 import publicClient from '../client/public.client';
+import privateClient from '../client/private.client';
 
 const userEndpoints = {
   myInfo: 'https://api.ipregistry.co/?key=w7rmsmjomkkb1u47',
   login: '/user/login',
   register: '/user/register',
-  avatarUpload: '/user/avatar-upload',
+  updateInfo: '/user/update-info',
 };
 
 const userApi = {
@@ -22,11 +23,16 @@ const userApi = {
     }
   },
 
-  avatarUpload: async avatar => {
+  updateInfo: async userData => {
     try {
-      const response = await publicClient.post(
-        userEndpoints.avatarUpload,
-        avatar
+      const response = await privateClient.post(
+        userEndpoints.updateInfo,
+        userData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
       );
 
       return { response };

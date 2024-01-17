@@ -1,77 +1,43 @@
 import Title from '../../Components/atoms/Title';
-import { put, upload } from '@vercel/blob/client';
 import { useState, useRef } from 'react';
-import { API_URL, LOCAL_STORAGE_TOKEN_NAME } from '../../../config';
-import privateClient from '../../api/client/private.client';
 import userApi from '../../api/modules/user.api';
-import axios from 'axios';
+import toast from 'react-hot-toast';
+
+import LoadingDots from '../../Components/atoms/LoadingDots';
 
 const Index = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
-  const [file, setFile] = useState();
+  const [loading, setLoading] = useState(false);
+  const [user] = useState(JSON.parse(localStorage.getItem('user')));
   const inputFileRef = useRef(null);
   const [blob, setBlob] = useState(null);
-
   const [userName, setUserName] = useState('');
-
-  const handleFileChange = e => {
-    console.log(e.target.files);
-    setFile(URL.createObjectURL(e.target.files[0]));
-  };
-
-  // login: async ({ email, password }) => {
-  //   try {
-  //     const response = await publicClient.post(userEndpoints.login, {
-  //       email,
-  //       password,
-  //     });
-
-  //     return { response };
-  //   } catch (err) {
-  //     return { err };
-  //   }
-  // },
 
   const uploadSubmit = async event => {
     event.preventDefault();
-    const formData = new FormData();
+    setLoading(true);
 
+    const formData = new FormData();
     const file = inputFileRef.current.files[0];
+
+    formData.append('userId', user.id);
+    formData.append('userName', userName);
     formData.append('avatar', file);
 
-    // axios
-    //   .post(`${API_URL}/user/avatar-upload`, formData, {
-    //     headers: {
-    //       'Content-type': 'multipart/form-data',
-    //     },
-    //   })
-    //   .then(res => {
-    //     console.log('res', res);
-    //   });
-
-    const response = await privateClient.post(
-      `${API_URL}/user/avatar-upload`,
-      {
-        username: 'test',
-        email: 'test',
-        avatar: file,
-        ...formData,
-      },
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-
+    const { response, err } = await userApi.updateInfo(formData);
     console.log('response', response);
 
-    // const newBlob = await put(file.name, file, {
-    //   access: 'public',
-    //   handleUploadUrl: `${API_URL}/user/avatar-upload`,
-    // });
+    if (response) {
+      setLoading(false);
 
-    // setBlob(newBlob);
+      localStorage.setItem('user', JSON.stringify(response));
+      toast.success('success');
+      location.reload();
+    }
+
+    if (err) {
+      setLoading(false);
+      toast.error(err.response.data.message || err.message);
+    }
   };
 
   return (
@@ -91,11 +57,16 @@ const Index = () => {
         </ul>
 
         <div>
-          <p className="mb-3">Change user info</p>
+          <h2 className="mb-3 text-lg font-medium">Change user info</h2>
 
-          <form className="flex flex-col space-y-4" onSubmit={uploadSubmit}>
-            <div>
+          <form
+            className="flex flex-col items-start space-y-4"
+            onSubmit={uploadSubmit}
+          >
+            <div className="flex items-center gap-2">
+              <label>Usename</label>
               <input
+                required
                 type="text"
                 value={userName}
                 onChange={e => setUserName(e.target.value)}
@@ -104,22 +75,17 @@ const Index = () => {
               />
             </div>
 
-            <div>
-              <input
-                type="text"
-                value={user.email}
-                onChange={() => {}}
-                className="px-4 py-2 border"
-                placeholder="email"
-              />
-            </div>
+            <div className="flex items-center gap-2">
+              <label>Avatar</label>
 
-            <div>
               <input name="file" ref={inputFileRef} type="file" required />
             </div>
 
-            <button className="px-2 py-1 border" type="submit">
-              Update
+            <button
+              className="px-2 py-1 border justify-center items-center flex min-w-[100px] min-h-[34px]"
+              type="submit"
+            >
+              {loading ? <LoadingDots color="bg-slate-600" /> : 'Update'}
             </button>
           </form>
 

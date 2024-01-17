@@ -39,15 +39,33 @@ const register = async (req, res) => {
   }
 };
 
-const uploadAvatar = async (req, res) => {
-  console.log(req.body);
+const updateInfo = async (req, res) => {
+  try {
+    const { userId, userName } = req.body;
 
-  // const blob = await put(req.files.avatar.name, req.files.avatar.data, {
-  //   access: 'public',
-  //   token: process.env.BLOB_READ_WRITE_TOKEN,
-  // });
+    const blob = await put(req.files.avatar.name, req.files.avatar.data, {
+      access: 'public',
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    });
 
-  // return responseHandler.ok(res, blob);
+    const user = await userModel.findOneAndUpdate(
+      { _id: userId },
+      { username: userName, avatar: blob.url },
+      {
+        new: true,
+        useFindAndModify: true,
+      }
+    );
+
+    user.avatar = blob.url;
+
+    responseHandler.ok(res, {
+      ...user._doc,
+      id: user.id,
+    });
+  } catch {
+    responseHandler.error(res);
+  }
 };
 
 const login = async (req, res) => {
@@ -115,5 +133,5 @@ export default {
   login,
   getInfo,
   getTest,
-  uploadAvatar,
+  updateInfo,
 };

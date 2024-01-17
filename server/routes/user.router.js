@@ -42,7 +42,7 @@ router.post(
   userController.login
 );
 
-router.post('/avatar-upload', userController.uploadAvatar);
+router.post('/update-info', tokenMiddleware.auth, userController.updateInfo);
 
 router.get('/info', userController.getInfo);
 
